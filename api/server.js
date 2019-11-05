@@ -8,6 +8,6 @@ const server = express();
 server.use(helmet());
 server.use(express.json());
 
-server.use('/', carRouter);
+server.use('/api/cars', carRouter);
 
 module.exports = server;
