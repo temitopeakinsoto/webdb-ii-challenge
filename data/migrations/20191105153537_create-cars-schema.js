@@ -4,16 +4,16 @@ exports.up = function(knex) {
         table.increments();
 
         table.text('vin', 128)
-        .unique().notNullAble();
+        .unique().notNullable();
 
         table.text('make', 128)
-        .notNullAble();
+        .notNullable();
 
         table.text('model', 128)
-        .notNullAble();
+        .notNullable();
 
         table.integer('mileage')
-        .notNullAble();
+        .notNullable();
 
         table.text('transmissiontype');
 
