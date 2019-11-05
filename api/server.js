@@ -1,6 +1,6 @@
 const express = require('express');
 const helmet = require('helmet');
-const carRouter = require('./cars/cars-router');
+const carRouter = require('../cars/cars-router');
 
 
 const server = express();
