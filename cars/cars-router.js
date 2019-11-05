@@ -7,29 +7,21 @@ function validateCarParams(req, res, next) {
   if (!carToBeInserted) {
     res.status(400).json({ message: "missing car data to be inserted" });
   } else if (!carToBeInserted.vin) {
-    res
-      .status(400)
-      .json({
-        message: "missing required vin field for car record to be created"
-      });
+    res.status(400).json({
+      message: "missing required vin field for car record to be created"
+    });
   } else if (!carToBeInserted.make) {
-    res
-      .status(400)
-      .json({
-        message: "missing required make field for car record to be created"
-      });
+    res.status(400).json({
+      message: "missing required make field for car record to be created"
+    });
   } else if (!carToBeInserted.model) {
-    res
-      .status(400)
-      .json({
-        message: "missing required model field for car record to be created"
-      });
+    res.status(400).json({
+      message: "missing required model field for car record to be created"
+    });
   } else if (!carToBeInserted.mileage) {
-    res
-      .status(400)
-      .json({
-        message: "missing required mileage field for car record to be created"
-      });
+    res.status(400).json({
+      message: "missing required mileage field for car record to be created"
+    });
   } else {
     next();
   }
@@ -66,20 +58,20 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", validateCarId, (req, res) => {
-    const { id } = req.params;
-  
-    db("cars")
-      .where({ id })
-      .first()
-      .then(car => {
-        res.status(200).json(car);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ message: `Failed to retrieve car: ${err.message}` });
-      });
-  });
+  const { id } = req.params;
+
+  db("cars")
+    .where({ id })
+    .first()
+    .then(car => {
+      res.status(200).json(car);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: `Failed to retrieve car: ${err.message}` });
+    });
+});
 
 router.post("/", validateCarParams, (req, res) => {
   const { vin, make, model, mileage, transmissiontype, status } = req.body;
@@ -103,33 +95,34 @@ router.post("/", validateCarParams, (req, res) => {
     });
 });
 
-router.put('/:id', validateCarParams, validateCarId, (req, res) => {
-    const { vin, make, model, mileage, transmissiontype, status } = req.car;
-    db('cars').where({ id: req.params.id })
-      .update({ vin, make, model, mileage, transmissiontype, status })
-      .then(affectedRecords => {
-        res.json(affectedRecords + ' records got changed!' );
-      })
-      .catch(error => {
-        res.status(500).json({ message: 'Something went wrong while trying to update this record: ' + error.message });
+router.put("/:id", validateCarParams, validateCarId, (req, res) => {
+  const { vin, make, model, mileage, transmissiontype, status } = req.car;
+  db("cars")
+    .where({ id: req.params.id })
+    .update({ vin, make, model, mileage, transmissiontype, status })
+    .then(affectedRecords => {
+      res.json(affectedRecords + " records got changed!");
+    })
+    .catch(error => {
+      res.status(500).json({
+        message:
+          "Something went wrong while trying to update this record: " +
+          error.message
       });
-  });
-
+    });
+});
 
 router.delete("/:id", validateCarId, (req, res) => {
-    const { id } = req.params;
-  
+  try {
     db("cars")
-      .where({ id })
-      .first()
+      .where({ id: req.params.id })
+      .del()
       .then(car => {
         res.status(200).json(car);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ message: `Failed to retrieve car: ${err.message}` });
       });
-  });
+  } catch (error) {
+    res.status(500).json({ message: `Failed to delete this car record: ${err.message}` });
+  }
+});
 
 module.exports = router;
