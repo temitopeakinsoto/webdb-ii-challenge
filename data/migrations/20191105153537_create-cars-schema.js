@@ -18,10 +18,13 @@ exports.up = function(knex) {
         table.text('transmissiontype');
 
         table.text('status');
+    }).then(() => {
+        console.log("cars table was successfully created!")
     })
   
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('cars');
+  return knex.schema.dropTableIfExists('cars')
+  .then("cars table was successfully dropped!");
 };
